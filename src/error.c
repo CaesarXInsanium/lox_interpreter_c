@@ -19,5 +19,14 @@ String explain_error(CLOX_ERROR err) {
   case CLOX_ERROR_GENERIC_ERR:
     return String_fromCharArray("Unknown Error, Or Lazy error, figure it out");
     break;
+  case CLOX_ERROR_FILE_NOT_FOUND:
+    return String_fromCharArray("provided filepath is not found");
+  default:
+    return String_fromCharArray("This should not happen");
   }
+}
+
+void current_error(void) {
+  if (had_error)
+    error(0, explain_error(error_type));
 }

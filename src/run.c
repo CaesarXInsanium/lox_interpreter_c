@@ -70,6 +70,7 @@ void load_source(FILE *fp, String *target) {
     target->len = strlen(target->buffer);
     target->capacity = file_size + 1;
     fclose(fp);
+    return;
   } else {
     goto HandleIOError;
   }

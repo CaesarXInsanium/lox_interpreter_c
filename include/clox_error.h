@@ -1,8 +1,8 @@
 #ifndef CLOX_ERROR_H
 #define CLOX_ERROR_H
+#include "clox_string.h"
 #include <stdbool.h>
 #include <stdio.h>
-#include "clox_string.h"
 typedef enum {
   CLOX_SUCCESS,
   CLOX_ERROR_EOF,
@@ -13,8 +13,14 @@ typedef enum {
 static bool had_error;
 static CLOX_ERROR error_type;
 
+// generic error logging that outouts to stder
 void error(int line, const String message);
+// logs error message to target stream
 void report(FILE *stream, int line, const String where, const String message);
+// takes Error enum and returns explanation on what is means
 String explain_error(CLOX_ERROR err);
+
+// prints out the information about the current error
+void current_error(void);
 
 #endif
