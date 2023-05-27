@@ -17,6 +17,8 @@ SRC = [
   'src/error.c',
   'src/run.c',
   'src/string.c',
+  'src/keywords.c',
+  'src/token.c',
 ]
 
 INC = include_directories('include')
