@@ -7,11 +7,13 @@
 
 typedef struct{
   TOKEN_E type;
-  String lexeme;
+  // must be a heap allocated string
+  String *lexeme;
   void *object;
   int line;
 } Token;
 
 Token newToken(TOKEN_E ty, String lex, void *obj, int line);
+void Token_destroy(Token *e);
 
 #endif

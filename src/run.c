@@ -1,5 +1,7 @@
 #include "run.h"
 #include "clox_error.h"
+#include "clox_linked_list.h"
+#include "clox_scanner.h"
 #include "clox_string.h"
 #include <stddef.h>
 #include <stdint.h>
@@ -29,6 +31,10 @@ HandleError:; // this semicolon will serve as an empty statement
 }
 CLOX_ERROR run(String source) {
   printf("Running this bullshit: %p\n", (void *)&source);
+  ScannerState *state = malloc(sizeof(ScannerState));
+  scanner_init(state, &source);
+  DList *tokens_list = scan_tokens(state);
+  dlist_destroy(tokens_list);
   return CLOX_SUCCESS;
 }
 CLOX_ERROR run_prompt(void) {
