@@ -1,6 +1,7 @@
 #include "clox_string.h"
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -16,4 +17,15 @@ String String_fromCharArray(const char *arr) {
   result.len = len;
   result.capacity = len;
   return result;
+}
+
+void String_drop(String s) {
+#ifndef N_DEBUG
+  printf("Freeing string with size: %d bytes\t, Contents:\n\"\"\"%s\"\"\"",
+         (int)s.len, s.buffer);
+#endif
+  free(s.buffer);
+  s.capacity = 0;
+  s.len = 0;
+  s.buffer = NULL;
 }

@@ -1,23 +1,60 @@
 #include "clox_keywords.h"
 #include "clox_token.h"
 #include "clox_token_type.h"
+#include <string.h>
 
-const struct KeyWord KeyWord_AND = {
-  .ty  = TOKEN_AND,
-  .word = "and"
-};
-const struct KeyWord KeyWord_OR;
-const struct KeyWord KeyWord_CLASS;
-const struct KeyWord KeyWord_ELSE;
-const struct KeyWord KeyWord_FALSE;
-const struct KeyWord KeyWord_FOR;
-const struct KeyWord KeyWord_FUN;
-const struct KeyWord KeyWord_IF;
-const struct KeyWord KeyWord_NIL;
-const struct KeyWord KeyWord_PRINT;
-const struct KeyWord KeyWord_RETURN;
-const struct KeyWord KeyWord_SUPER;
-const struct KeyWord KeyWord_THIS;
-const struct KeyWord KeyWord_TRUE;
-const struct KeyWord KeyWord_VAR;
-const struct KeyWord KeyWord_WHILE;
+struct KeywordResult is_keyword(char *str) {
+  struct KeywordResult result;
+  if (strcmp(str, "and")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_AND};
+    return result;
+  } else if (strcmp(str, "or")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_OR};
+    return result;
+  } else if (strcmp(str, "class")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_CLASS};
+    return result;
+  } else if (strcmp(str, "else")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_ELSE};
+    return result;
+  } else if (strcmp(str, "false")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_FALSE};
+    return result;
+  } else if (strcmp(str, "for")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_FOR};
+    return result;
+  } else if (strcmp(str, "fun")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_FUN};
+    return result;
+  } else if (strcmp(str, "if")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_IF};
+    return result;
+  } else if (strcmp(str, "nil")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_NIL};
+    return result;
+  } else if (strcmp(str, "print")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_PRINT};
+    return result;
+  } else if (strcmp(str, "return")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_RETURN};
+    return result;
+  } else if (strcmp(str, "super")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_SUPER};
+    return result;
+  } else if (strcmp(str, "this")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_THIS};
+    return result;
+  } else if (strcmp(str, "true")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_TRUE};
+    return result;
+  } else if (strcmp(str, "var")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_VAR};
+    return result;
+  } else if (strcmp(str, "while")) {
+    struct KeywordResult result = {.b = true, .e = TOKEN_WHILE};
+    return result;
+  }
+  result.b = false;
+  result.e = TOKEN_IDENTIFIER;
+  return result;
+}

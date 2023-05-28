@@ -17,4 +17,7 @@ String newString(int capacity);
 bool String_isEmpty(String s);
 // easy way of building String "shit like this"
 String String_fromCharArray(const char *arr);
+
+// FUNCTION MUST BE CALLED  AT END OF SCOPE OR MEMORY LEAK HAPPENS
+void String_drop(String s);
 #endif

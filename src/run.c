@@ -12,13 +12,19 @@ CLOX_ERROR run_file(const char *path) {
   if (had_error) {
     goto HandleError;
   }
+
   String source;
   load_source(fp, &source);
   if (had_error)
     goto HandleError;
   run(source);
-HandleError:
-  report(stderr, 1, String_fromCharArray("path"), explain_error(error_type));
+
+  String_drop(source);
+  return CLOX_SUCCESS;
+HandleError:; // this semicolon will serve as an empty statement
+  String path_s = String_fromCharArray("path");
+  report(stderr, 1, path_s, explain_error(error_type));
+  String_drop(path_s);
   return error_type;
 }
 CLOX_ERROR run(String source) {
@@ -36,6 +42,8 @@ CLOX_ERROR run_prompt(void) {
     }
     run(line);
     had_error = false;
+
+    String_drop(line);
   }
   return error_type;
 }

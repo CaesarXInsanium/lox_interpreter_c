@@ -4,12 +4,17 @@
 #include <stdio.h>
 
 void error(int line, const String message) {
-  report(stderr, line, String_fromCharArray(""), message);
+  String s = String_fromCharArray("");
+  report(stderr, line, s, message);
+
+  // free the memory
+  String_drop(s);
 }
 void report(FILE *stream, int line, const String where, const String message) {
   fprintf(stream, "Line: %d, had error {%s}\nhere -> %s\n", line,
           message.buffer, where.buffer);
 }
+
 String explain_error(CLOX_ERROR err) {
   switch (err) {
   case CLOX_SUCCESS:
@@ -27,6 +32,9 @@ String explain_error(CLOX_ERROR err) {
 }
 
 void current_error(void) {
-  if (had_error)
-    error(0, explain_error(error_type));
+  if (had_error){
+    String s = explain_error(error_type);
+    error(0, s);
+    String_drop(s);
+  }
 }
