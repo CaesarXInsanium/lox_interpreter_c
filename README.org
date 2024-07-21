@@ -1,0 +1,9 @@
+#+TITLE: Lox Interpreter in C
+
+* Purpose
+
+I used to want to be able to create a Lox interpreter in C but I got stuck in the need to make a list in C and I got bored when I realized I needed to make my own data structures but with out generic programming like in Rust or nice Macros like in Nim.
+
+* Progress
+
+Right now this project is pretty much abandonded since I have no idea how to create a proper List or array structure for the purposes of holding data.

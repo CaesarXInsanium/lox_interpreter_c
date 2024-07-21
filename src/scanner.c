@@ -9,11 +9,100 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-void scanner_init(ScannerState *scanner, String *source);
+void scanner_init(ScannerState *scanner, String *source){
+  scanner->source = source;
+  DList *list = (DList*)malloc(sizeof(DList));
+  dlist_init(list, sizeof(Token), NULL);
+  scanner->tokens = list;
+  scanner->start = 0;
+  scanner->current = 0;
+  scanner->line = 0;
+}
 
-DList *scan_tokens(ScannerState *scanner);
+DList *scan_tokens(ScannerState *scanner){
+  while(!is_at_end(scanner)){
+    scanner->start = scanner->current;
+    scan_token(scanner);
+  }
+  return scanner->tokens;
+}
 
-void scan_token(String *scanner);
+void scan_token(ScannerState *scanner){
+    char c = advance(scanner);
+    switch (c) {
+    case '(':
+      add_token(scanner, TOKEN_LEFT_PAREN);
+      break;
+    case ')':
+      add_token(scanner,TOKEN_RIGHT_PAREN);
+      break;
+    case '{':
+      add_token(scanner, TOKEN_LEFT_BRACE);
+      break;
+    case '}':
+      add_token(scanner, TOKEN_RIGHT_BRACE);
+      break;
+    case ',':
+      add_token(scanner, TOKEN_COMMA);
+      break;
+    case '.':
+      add_token(scanner, TOKEN_DOT);
+      break;
+    case '-':
+      add_token(scanner, TOKEN_MINUS);
+      break;
+    case '+':
+      add_token(scanner, TOKEN_PLUS);
+      break;
+    case ';':
+      add_token(scanner, TOKEN_SEMICOLON);
+      break;
+    case '*':
+      add_token(scanner, TOKEN_STAR);
+      break;
+
+    // Two Characters
+    case '!':
+      add_token(scanner, match(scanner, '=') ? TOKEN_BANG_EQUAL : TOKEN_BANG);
+      break;
+    case '=':
+      add_token(scanner, match(scanner, '=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
+      break;
+    case '<':
+      add_token(scanner, match(scanner, '=') ? TOKEN_LESS_EQUAL : TOKEN_LESS);
+      break;
+    case '>':
+      add_token(scanner, match(scanner, '=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
+      break;
+    case '/':
+      if (match(scanner, '/')) {
+        while (peek(scanner) != '\n' && !is_at_end(scanner))
+          advance(scanner);
+      } else {
+        add_token(scanner, TOKEN_SLASH);
+      }
+
+    case ' ':
+    case '\r':
+    case '\t':
+      break;
+    case '\n':
+      scanner->line++;
+      break;
+    case '"':
+      string(scanner);
+      break;
+    default:
+      if ( is_number(c)) {
+        number(scanner);
+      } else if (is_alpha(c)) {
+        identifier(scanner);
+      } else {
+        error(scanner->line, String_fromCharArray("Unexpected Character."));
+      }
+      break;
+    }
+}
 
 void number(ScannerState *scanner){
   while(isdigit(peek(scanner))){
@@ -27,7 +116,9 @@ void number(ScannerState *scanner){
   }
   LoxObject *obj = malloc(sizeof(LoxObject));
   obj->type = LOX_REAL;
-  obj->obj.real = parse_double(number_text);
+  String numtext = String_fromSlice(*scanner->source, scanner->start + 1, scanner->current-1);
+  obj->obj.real = parse_double(numtext);
+  String_destroy(&numtext);
   add_token_obj(scanner, TOKEN_NUMBER, obj);
 }
 void string(ScannerState *scanner){
@@ -87,9 +178,11 @@ void add_token_obj(ScannerState *scanner, TOKEN_E type, LoxObject *obj) {
   token->line = scanner->line;
   token->lexeme = String_toHeap(text);
   token->object = obj;
-  dlist_ins_next(scanner->result, dlist_tail(scanner->result), token);
+  dlist_ins_next(scanner->tokens, dlist_tail(scanner->tokens), token);
 }
-void add_token(ScannerState *scanner, TOKEN_E type);
+void add_token(ScannerState *scanner, TOKEN_E type){
+  add_token_obj(scanner, type, NULL);
+}
 
 bool is_at_end(ScannerState *scanner) {
   return scanner->current >= scanner->source->len;

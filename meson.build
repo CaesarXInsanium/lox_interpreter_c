@@ -21,6 +21,7 @@ SRC = [
   'src/token.c',
   'src/dlist.c',
   'src/scanner.c',
+  'src/clox_object.c'
 ]
 
 INC = include_directories('include')
@@ -28,7 +29,7 @@ INC = include_directories('include')
 DEPS = [
 
 ]
-
+ 
 executable(
           'clox',
           SRC, 

@@ -3,6 +3,7 @@
 #include "clox_string.h"
 
 typedef enum {
+  LOX_NULL,
   LOX_STRING,
   LOX_INT,
   LOX_REAL,
@@ -20,3 +21,5 @@ typedef struct{
 } LoxObject;
 
 void LoxObject_destroy(LoxObject *obj);
+
+double parse_double(const String str);

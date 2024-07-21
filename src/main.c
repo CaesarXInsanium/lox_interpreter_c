@@ -10,12 +10,11 @@ static bool had_error = false;
 static CLOX_ERROR error_type = CLOX_SUCCESS;
 
 int main(int argv, char **argc) {
-  if (argv > 2) {
+    if (argv > 2) {
     printf("Correct Usage: clox [script]\n");
     exit(EXIT_FAILURE);
   } else if (argv == 2) {
     String source;
-
     FILE *source_file_fp = open_path(argc[1]);
     load_source(source_file_fp, &source);
     if (had_error) {

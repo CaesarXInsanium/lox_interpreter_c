@@ -14,7 +14,6 @@ typedef struct {
   size_t start;
   size_t current;
   size_t line;
-  DList *result;
 }ScannerState ;
 
 // functions
@@ -24,7 +23,7 @@ void scanner_init(ScannerState *scanner, String *source);
 // only function that is meant to be used
 DList *scan_tokens(ScannerState *scanner);
 
-void scan_token(String *scanner);
+void scan_token(ScannerState *scanner);
 
 void number(ScannerState *scanner);
 void string(ScannerState *scanner);
